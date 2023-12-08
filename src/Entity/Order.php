@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use App\Service\TotalPriceService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -39,7 +40,7 @@ class Order
         $this->items = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
@@ -126,19 +127,20 @@ class Order
         return $this;
     }
 
-    /**
-     * Calculates the total price of all various products with selected quantity.
-     * 
-     * @return float
-     */
-    public function getTotalPriceForAllProducts(): float
-    {
-        $total = 0;
+    // /**
+    //  * Calculates the total price of all various products with selected quantity.
+    //  * 
+    //  * @return float
+    //  */
+    // public function getTotalPriceForAllProducts(TotalPriceService $tsp): float
+    // {
+    //     $total = 0;
 
-        foreach ($this->getItems() as $item) {
-            $total += $item->getTotalPrice();
-        }
+    //     foreach ($this->getItems() as $item) {
+    //         // $total += $item->getTotalPrice();
+    //         $total += $tsp->getTotalPrice($item->getProduct()->getPrice(), $item->getQuantity());
+    //     }
 
-        return $total;
-    }
+    //     return $total;
+    // }
 }

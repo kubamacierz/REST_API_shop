@@ -27,7 +27,7 @@ class OrderItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderRef = null;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
@@ -80,13 +80,13 @@ class OrderItem
         return $this->getProduct()->getId() === $item->getProduct()->getId();
     }
 
-    /**
-     * Calculates the total price for selected quantity of products.
-     * 
-     * @return float
-     */
-    public function getTotalPrice(): float
-    {
-        return $this->getProduct()->getPrice() * $this->getQuantity();
-    }
+    // /**
+    //  * Calculates the total price for selected quantity of products.
+    //  * 
+    //  * @return float
+    //  */
+    // public function getTotalPrice(): float
+    // {
+    //     return $this->getProduct()->getPrice() * $this->getQuantity();
+    // }
 }
