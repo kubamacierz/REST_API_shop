@@ -23,7 +23,7 @@ class ProductController extends AbstractApiController
 
 
     #[Route('/products', name: 'list_all_products', methods: 'GET')]
-    public function indexAction(Request $request, ProductRepository $productRepository): JsonResponse
+    public function indexAction(ProductRepository $productRepository): JsonResponse
     {
         $products = $productRepository->findAll();
 
