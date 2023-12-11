@@ -33,11 +33,20 @@ class OrderService
     {
         $ids = [];
 
+        // foreach($orderItems as $orderItem)
+        // {
+        //     $ids[] = $orderItem['id'];
+        // }
+
+        $quantityById = [];
+
         foreach($orderItems as $orderItem)
         {
             $ids[] = $orderItem['id'];
+            $quantityById[$orderItem['id']] = $orderItem['qty'];
         }
 
+        // dd($quantityById);
 
         $products = $this->productRepository->findProductsByIds($ids);
         // $products = $this->productRepository->findBy(['id' => $ids]);
@@ -55,16 +64,14 @@ class OrderService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        $i = 0;
         foreach ($products as $product) {
             $orderedItem = new OrderItem();
             $orderedItem->setProduct($product);
             $orderedItem->setOrderRef($order);
-            $orderedItem->setQuantity($orderItems[$i]['qty']);
+            $orderedItem->setQuantity($quantityById[$product->getId()->toRfc4122()]);
 
             $this->entityManager->persist($orderedItem);
             $this->entityManager->flush();
-            $i++;
         }
 
         return $order;
