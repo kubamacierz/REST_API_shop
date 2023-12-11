@@ -7,6 +7,7 @@ use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\OrderService;
 use App\Service\ProductService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
+use Symfony\Component\Validator\Constraints\JsonValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 #[Route('api')]
 class ProductController extends AbstractApiController
@@ -54,36 +58,41 @@ class ProductController extends AbstractApiController
         return $this->respond($product);
     }
 
-    #[Route('/test')]
-    public function showProductsByIds(ProductService $productService)
-    {
-        $json = '[{"id":"018c49f4-328f-7aea-99eb-7dc599de2eb7", "qty":5}, {"id":"018c4e14-5775-7d57-b013-ef4ad42bc342", "qty":7}]';
-        /** @var Product $product */
-        $products = $productService->findProductsByIds($json);
+    
 
-        $jsondecoded = json_decode($json);
+    // #[Route('/test')]
+    // public function showProductsByIds(ProductService $productService)
+    // {
+    //     $json = '[{"id":"018c49f4-328f-7aea-99eb-7dc599de2eb7", "qty":5}, {"id":"018c4e14-5775-7d57-b013-ef4ad42bc342", "qty":7}]';
+    //     /** @var Product $product */
+    //     $products = $productService->findProductsByIds($json);
 
-        // var_dump($products);
+    //     $jsondecoded = json_decode($json);
 
-        $order = new Order();
-        $order->setCreatedAt(new DateTime());
-        $order->setUpdatedAt(new DateTime());
+    //     // var_dump($products);
 
-        $this->em->persist($order);
-        $this->em->flush();
+    //     $order = new Order();
+    //     $order->setCreatedAt(new DateTime());
+    //     $order->setUpdatedAt(new DateTime());
 
-        $i = 0;
-        foreach ($products as $product) {
-            $orderItem = new OrderItem();
-            $orderItem->setProduct($product);
-            $orderItem->setOrderRef($order);
-            $orderItem->setQuantity($jsondecoded[$i]->qty);
+    //     $this->em->persist($order);
+    //     $this->em->flush();
 
-            $this->em->persist($orderItem);
-            $this->em->flush();
-            $i++;
-        }
+    //     $odredItems = [];
 
-        return $this->respond('la');
-    }
+    //     $i = 0;
+    //     foreach ($products as $product) {
+    //         $orderItem = new OrderItem();
+    //         $orderItem->setProduct($product);
+    //         $orderItem->setOrderRef($order);
+    //         $orderItem->setQuantity($jsondecoded[$i]->qty);
+    //         $odredItems[] = $orderItem;
+
+    //         $this->em->persist($orderItem);
+    //         $this->em->flush();
+    //         $i++;
+    //     }
+
+    //     return $this->respond($odredItems);
+    // }
 }
