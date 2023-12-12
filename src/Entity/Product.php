@@ -19,15 +19,15 @@ class Product
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order'])]
+    #[Groups(['order', 'product'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['order'])]
+    #[Groups(['product'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['order'])]
+    #[Groups(['order', 'product'])]
     private ?float $price = null;
 
     public function getId(): ?Uuid
