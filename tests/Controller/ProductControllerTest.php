@@ -22,8 +22,6 @@ class ProductControllerTest extends WebTestCase
             ]
         );
 
-        // var_dump($client->getResponse());
-
         $this->assertResponseHeaderSame('x-task', '1');
 
         $this->assertInstanceOf(Response::class, $client->getResponse());

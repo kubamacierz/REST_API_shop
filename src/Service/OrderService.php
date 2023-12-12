@@ -4,10 +4,8 @@ namespace App\Service;
 
 use App\Entity\Order;
 use App\Entity\OrderItem;
-use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Uid\Uuid;
 use DateTime;
 use Exception;
 

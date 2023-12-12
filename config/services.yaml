@@ -34,13 +34,4 @@ services:
                 - '@App\Collector\TotalGrossPriceCalculator'
                 - '@App\Collector\TotalVatCalculator'
                 - '@App\Collector\TotalQuantityCalculator'
-
-    # collector.custom.vat_only:
-    #     class: '@App\Collector\TotalCalculatorCollector'
-    #         arguments:
-    #             '@App\Collector\TotalVatCalculator'
-
-
-    # App\Controller\CollectorController:
-    #     arguments:
-    #         - '@collector.custom.vat_only'
+                
