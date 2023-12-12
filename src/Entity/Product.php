@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -18,12 +19,15 @@ class Product
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order', 'product'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['product'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['order', 'product'])]
     private ?float $price = null;
 
     public function getId(): ?Uuid

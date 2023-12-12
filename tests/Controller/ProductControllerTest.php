@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,20 +13,19 @@ class ProductControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->jsonRequest('POST', '/api/products', [
-            "name" => "testowe",
-            "description" => "testowy opis",
-            "price" => 4.1
-        ],
-        [
-            'CONTENT_TYPE' => 'application/json'
-        ]
-    );
+                "name" => "testowe",
+                "description" => "testowy opis",
+                "price" => 4.1
+            ],
+            [
+                'CONTENT_TYPE' => 'application/json'
+            ]
+        );
 
-        var_dump($client->getResponse());
+        // var_dump($client->getResponse());
 
         $this->assertResponseHeaderSame('x-task', '1');
 
-        $this->assertIsObject($client->getResponse());
         $this->assertInstanceOf(Response::class, $client->getResponse());
 
         $this->assertResponseStatusCodeSame(200);

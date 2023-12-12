@@ -2,44 +2,46 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
-use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
-use App\Service\OrderService;
-use App\Service\ProductService;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Json;
-use Symfony\Component\Validator\Constraints\JsonValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('api')]
 class ProductController extends AbstractApiController
 {
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $eM)
+    private SerializerInterface $serializer;
+
+    public function __construct(EntityManagerInterface $eM, SerializerInterface $serializer)
     {
         $this->em = $eM;
+        $this->serializer = $serializer;
     }
-
 
     #[Route('/products', name: 'list_all_products', methods: 'GET')]
     public function indexAction(ProductRepository $productRepository): JsonResponse
     {
         $products = $productRepository->findAll();
 
-        return $this->json($products);
+        $response = new JsonResponse(
+            $this->serializer->serialize($products, 'json', ['groups' => ['product']]),
+            200, 
+            [], 
+            true
+        );
+
+        return $response;
     }
 
     #[Route('/products', name: 'create_product', methods: 'POST')]
-    public function createAction(Request $request): Response
+    public function createAction(Request $request)
     {
         $form = $this->buildForm(ProductType::class);
 
@@ -55,44 +57,13 @@ class ProductController extends AbstractApiController
         $this->em->persist($product);
         $this->em->flush();
 
-        return $this->respond($product);
+        $response = new JsonResponse(
+            $this->serializer->serialize($product, 'json', ['groups' => ['product']]),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+
+        return $response;
     }
-
-    
-
-    // #[Route('/test')]
-    // public function showProductsByIds(ProductService $productService)
-    // {
-    //     $json = '[{"id":"018c49f4-328f-7aea-99eb-7dc599de2eb7", "qty":5}, {"id":"018c4e14-5775-7d57-b013-ef4ad42bc342", "qty":7}]';
-    //     /** @var Product $product */
-    //     $products = $productService->findProductsByIds($json);
-
-    //     $jsondecoded = json_decode($json);
-
-    //     // var_dump($products);
-
-    //     $order = new Order();
-    //     $order->setCreatedAt(new DateTime());
-    //     $order->setUpdatedAt(new DateTime());
-
-    //     $this->em->persist($order);
-    //     $this->em->flush();
-
-    //     $odredItems = [];
-
-    //     $i = 0;
-    //     foreach ($products as $product) {
-    //         $orderItem = new OrderItem();
-    //         $orderItem->setProduct($product);
-    //         $orderItem->setOrderRef($order);
-    //         $orderItem->setQuantity($jsondecoded[$i]->qty);
-    //         $odredItems[] = $orderItem;
-
-    //         $this->em->persist($orderItem);
-    //         $this->em->flush();
-    //         $i++;
-    //     }
-
-    //     return $this->respond($odredItems);
-    // }
 }

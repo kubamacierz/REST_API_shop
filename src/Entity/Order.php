@@ -3,12 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
-use App\Service\TotalPriceService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -22,12 +22,15 @@ class Order
     private ?Uuid $id = null;
 
     #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: OrderItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['order'])]
     private Collection $items;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order'])]
     private ?string $status = self::STATUS_CART;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['order'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -126,21 +129,4 @@ class Order
 
         return $this;
     }
-
-    // /**
-    //  * Calculates the total price of all various products with selected quantity.
-    //  * 
-    //  * @return float
-    //  */
-    // public function getTotalPriceForAllProducts(TotalPriceService $tsp): float
-    // {
-    //     $total = 0;
-
-    //     foreach ($this->getItems() as $item) {
-    //         // $total += $item->getTotalPrice();
-    //         $total += $tsp->getTotalPrice($item->getProduct()->getPrice(), $item->getQuantity());
-    //     }
-
-    //     return $total;
-    // }
 }
