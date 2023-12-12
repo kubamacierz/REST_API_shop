@@ -10,9 +10,9 @@ class TotalCalculatorCollector
     private $totalCalculators = [];
 
 
-    public function __construct(array $priceCalculators)
+    public function __construct(array $totalCalculators)
     {
-        $this->totalCalculators = $priceCalculators;
+        $this->totalCalculators = $totalCalculators;
     }
 
     public function calculate(Collection $orderItems)

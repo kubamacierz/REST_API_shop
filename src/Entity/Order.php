@@ -2,23 +2,17 @@
 
 namespace App\Entity;
 
-use App\Collector\TotalCalculatorCollector;
-use App\Collector\TotalGrossPriceCalculator;
-use App\Collector\TotalNetPriceCalculator;
 use App\Repository\OrderRepository;
-use App\Service\TotalPriceService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-// #[Groups(['order'])]
 class Order
 {
     #[ORM\Id]
@@ -29,7 +23,6 @@ class Order
 
     #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: OrderItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[Groups(['order'])]
-    #[MaxDepth(3)]
     private Collection $items;
 
     #[ORM\Column(length: 255)]

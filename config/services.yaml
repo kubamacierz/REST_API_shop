@@ -26,3 +26,21 @@ services:
     App\EventListener\ResponseListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.response' }
+
+    App\Collector\TotalCalculatorCollector:
+        arguments:
+            $totalCalculators:
+                - '@App\Collector\TotalNetPriceCalculator'
+                - '@App\Collector\TotalGrossPriceCalculator'
+                - '@App\Collector\TotalVatCalculator'
+                - '@App\Collector\TotalQuantityCalculator'
+
+    # collector.custom.vat_only:
+    #     class: '@App\Collector\TotalCalculatorCollector'
+    #         arguments:
+    #             '@App\Collector\TotalVatCalculator'
+
+
+    # App\Controller\CollectorController:
+    #     arguments:
+    #         - '@collector.custom.vat_only'

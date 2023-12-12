@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\OrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Node\Name;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -23,7 +22,6 @@ class OrderItem
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['order'])]
-    #[MaxDepth(3)]
     private ?Product $product = null;
 
     #[ORM\Column]
@@ -32,8 +30,6 @@ class OrderItem
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'order_ref_id', referencedColumnName: 'id', nullable: false)]
-    // #[Groups(['order'])]
-    #[MaxDepth(3)]
     private ?Order $orderRef = null;
 
     public function getId(): ?Uuid
@@ -88,14 +84,4 @@ class OrderItem
     {
         return $this->getProduct()->getId() === $item->getProduct()->getId();
     }
-
-    // /**
-    //  * Calculates the total price for selected quantity of products.
-    //  * 
-    //  * @return float
-    //  */
-    // public function getTotalPrice(): float
-    // {
-    //     return $this->getProduct()->getPrice() * $this->getQuantity();
-    // }
 }

@@ -3,10 +3,6 @@
 namespace App\Controller;
 
 use App\Collector\TotalCalculatorCollector;
-use App\Collector\TotalGrossPriceCalculator;
-use App\Collector\TotalNetPriceCalculator;
-use App\Collector\TotalQuantityCalculator;
-use App\Collector\TotalVatCalculator;
 use App\Entity\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,29 +24,27 @@ class OrderController extends AbstractController
     #[Route('/orders/{id}', name: 'order_by_id', methods: 'GET')]
     public function showOrderAction(Order $order): JsonResponse
     {
-        $response = new JsonResponse($this->serializer->serialize($order, 'json', ['groups' => ['order']]), 200, [], true);
+        $response = new JsonResponse(
+            $this->serializer->serialize($order, 'json', ['groups' => ['order']]), 
+            200, 
+            [], 
+            true
+        );
 
         return $response;
     }
 
     #[Route('/orders/details/{id}', name: 'order_by_id_with_details', methods: 'GET')]
-    public function showOrderWithDetailsAction(Order $order): JsonResponse
+    public function showOrderWithDetailsAction(
+        Order $order, 
+        TotalCalculatorCollector $totalCalculatorCollector
+        ): JsonResponse
     {
         $orderItems = $order->getItems();
 
-        $totalCalculatorCollector = new TotalCalculatorCollector([
-            new TotalNetPriceCalculator(),
-            new TotalGrossPriceCalculator(),
-            new TotalVatCalculator(),
-            new TotalQuantityCalculator()
-        ]);
-
         $totals = $totalCalculatorCollector->calculate($orderItems);
-        dd($totals);
 
-        $response = new JsonResponse($this->serializer->serialize($order, 'json', ['groups' => ['order']]), 200, [], true);
-
-        return $response;
+        return new JsonResponse($totals);
     }
 
     #[Route('/orders/create', name: 'order_create', methods: ['POST', 'GET'])]
@@ -74,7 +68,12 @@ class OrderController extends AbstractController
             return new JsonResponse(['message' => $order, 422]);
         }
 
-        $response = new JsonResponse($this->serializer->serialize($order, 'json', ['groups' => ['order']]), 200, [], true);
+        $response = new JsonResponse(
+            $this->serializer->serialize($order, 'json', ['groups' => ['order']]), 
+            200, 
+            [], 
+            true
+        );
 
         return $response;
     }
