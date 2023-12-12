@@ -16,7 +16,7 @@ final class TotalGrossPriceCalculator implements TotalCalculatorInterface
             $totalPrice += $orderItem->getProduct()->getPrice() * $orderItem->getQuantity() * 1.23;
         }
 
-        return $totalPrice;
+        return round($totalPrice, 2);
     }
 
     public function getFlag(): string

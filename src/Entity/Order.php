@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Collector\TotalCalculatorCollector;
+use App\Collector\TotalGrossPriceCalculator;
+use App\Collector\TotalNetPriceCalculator;
 use App\Repository\OrderRepository;
 use App\Service\TotalPriceService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -133,21 +136,4 @@ class Order
 
         return $this;
     }
-
-    // /**
-    //  * Calculates the total price of all various products with selected quantity.
-    //  * 
-    //  * @return float
-    //  */
-    // public function getTotalPriceForAllProducts(TotalPriceService $tsp): float
-    // {
-    //     $total = 0;
-
-    //     foreach ($this->getItems() as $item) {
-    //         // $total += $item->getTotalPrice();
-    //         $total += $tsp->getTotalPrice($item->getProduct()->getPrice(), $item->getQuantity());
-    //     }
-
-    //     return $total;
-    // }
 }

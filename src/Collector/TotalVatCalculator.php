@@ -17,7 +17,7 @@ final class TotalVatCalculator implements TotalCalculatorInterface
             $totalVat += (($price * 1.23) - $price) * $orderItem->getQuantity(); 
         }
 
-        return $totalVat;
+        return round($totalVat, 2);
     }
 
     public function getFlag(): string
