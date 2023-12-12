@@ -61,18 +61,21 @@ class OrderService
         $order->setCreatedAt(new DateTime());
         $order->setUpdatedAt(new DateTime());
 
-        $this->entityManager->persist($order);
-        $this->entityManager->flush();
+        // $this->entityManager->persist($order);
+        // $this->entityManager->flush();
 
         foreach ($products as $product) {
             $orderedItem = new OrderItem();
             $orderedItem->setProduct($product);
-            $orderedItem->setOrderRef($order);
+            // $orderedItem->setOrderRef($order);
             $orderedItem->setQuantity($quantityById[$product->getId()->toRfc4122()]);
+            $order->addItem($orderedItem);
 
-            $this->entityManager->persist($orderedItem);
-            $this->entityManager->flush();
+            // $this->entityManager->persist($orderedItem);
+            // $this->entityManager->flush();
         }
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
 
         return $order;
     }

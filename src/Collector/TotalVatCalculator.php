@@ -4,7 +4,7 @@ namespace App\Collector;
 
 use Doctrine\Common\Collections\Collection;
 
-final class VatCalculator implements TotalCalculatorInterface
+final class TotalVatCalculator implements TotalCalculatorInterface
 {
     private $flag = 'totalVat';
 
