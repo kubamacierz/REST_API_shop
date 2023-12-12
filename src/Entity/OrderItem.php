@@ -4,7 +4,10 @@ namespace App\Entity;
 
 use App\Repository\OrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Name;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
@@ -14,17 +17,23 @@ class OrderItem
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['order'])]
     private ?Uuid $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order'])]
+    #[MaxDepth(3)]
     private ?Product $product = null;
 
     #[ORM\Column]
+    #[Groups(['order'])]
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'items')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'order_ref_id', referencedColumnName: 'id', nullable: false)]
+    // #[Groups(['order'])]
+    #[MaxDepth(3)]
     private ?Order $orderRef = null;
 
     public function getId(): ?Uuid

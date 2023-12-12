@@ -9,10 +9,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+// #[Groups(['order'])]
 class Order
 {
     #[ORM\Id]
@@ -22,12 +25,16 @@ class Order
     private ?Uuid $id = null;
 
     #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: OrderItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['order'])]
+    #[MaxDepth(3)]
     private Collection $items;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order'])]
     private ?string $status = self::STATUS_CART;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['order'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

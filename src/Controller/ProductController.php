@@ -35,7 +35,7 @@ class ProductController extends AbstractApiController
     {
         $products = $productRepository->findAll();
 
-        return $this->json($products);
+        return $this->json($products, 200, [], ['groups' => ['order']]);
     }
 
     #[Route('/products', name: 'create_product', methods: 'POST')]
